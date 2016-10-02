@@ -44,7 +44,7 @@ public class BlockListener {
 		BlockSnapshot bss = e.getTransactions().get(0).getOriginal();
 		BlockType type = bss.getState().getType();
 		
-		MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreate(p.getUniqueId().toString());
+		MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreatePlayer(p.getUniqueId().toString());
 		Location<World> loc = bss.getLocation().get();
 				
 		if (WatchList.shouldWatch(type, bss.getState().getId()) && bss.getLocation().isPresent()) { 

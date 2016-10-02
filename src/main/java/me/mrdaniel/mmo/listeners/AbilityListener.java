@@ -150,7 +150,7 @@ public class AbilityListener {
 			if (WatchList.isBlocked(bss.getLocation().get())) { return; }
 			if (Abilities.getInstance().active.containsKey(p.getName())) {
 				if (Abilities.getInstance().active.get(p.getName()) == Ability.TREE_VELLER) {
-					MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreate(p.getUniqueId().toString());
+					MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreatePlayer(p.getUniqueId().toString());
 					breakNext(e.getTransactions().get(0).getOriginal().getLocation().get(), mmop);
 				}
 			}

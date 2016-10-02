@@ -1,16 +1,6 @@
 package me.mrdaniel.mmo;
 
-import java.io.File;
-
-import org.slf4j.Logger;
-import org.spongepowered.api.Game;
-import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.state.GameInitializationEvent;
-import org.spongepowered.api.event.game.state.GameStoppingEvent;
-import org.spongepowered.api.plugin.Plugin;
-
 import com.google.inject.Inject;
-
 import me.mrdaniel.mmo.commands.CommandMMOAdmin;
 import me.mrdaniel.mmo.commands.CommandMMOReload;
 import me.mrdaniel.mmo.commands.CommandShell;
@@ -27,14 +17,27 @@ import me.mrdaniel.mmo.listeners.AbilityListener;
 import me.mrdaniel.mmo.listeners.BlockListener;
 import me.mrdaniel.mmo.listeners.PlayerListener;
 import me.mrdaniel.mmo.listeners.WorldListener;
+import org.slf4j.Logger;
+import org.spongepowered.api.Game;
+import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.state.GameInitializationEvent;
+import org.spongepowered.api.event.game.state.GameStoppingEvent;
+import org.spongepowered.api.plugin.Plugin;
 
-@Plugin(id = "adventuremmo", name = "AdventureMMO", version = "1.3.0")
+import java.io.File;
+import java.nio.file.Path;
+
+@Plugin(id = "adventuremmo", name = "AdventureMMO", version = "1.4.1")
 public class Main {
 
 	@Inject
 	private Logger logger;
 	@Inject
 	private Game game;
+	@Inject
+	@ConfigDir(sharedRoot = false)
+	private Path path;
 	
 	private static Main instance;
 	public static Main getInstance() { return instance; }
@@ -48,7 +51,7 @@ public class Main {
 		File folder = new File("config/mmo");
 		if (!folder.exists()) folder.mkdir();
 		
-		MMOPlayerDatabase.getInstance().setup();
+		MMOPlayerDatabase.getInstance().setPlayersPath(path.resolve("players"));
 		Config.setup();
 		SkillTop.getInstance().setup();
 		ModdedBlocks.setup();
@@ -81,7 +84,7 @@ public class Main {
 	@Listener
 	public void serverStopping(GameStoppingEvent e) {
 		logger.info("Saving All Data");
-		MMOPlayerDatabase.getInstance().writeAll();
+		MMOPlayerDatabase.getInstance().saveAll();
 		ChunkManager.getInstance().writeAll();
 	}
 }

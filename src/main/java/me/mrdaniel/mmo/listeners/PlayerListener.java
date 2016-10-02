@@ -1,7 +1,15 @@
 package me.mrdaniel.mmo.listeners;
 
-import java.util.Optional;
-
+import me.mrdaniel.mmo.enums.Ability;
+import me.mrdaniel.mmo.enums.RepairStore;
+import me.mrdaniel.mmo.enums.SkillType;
+import me.mrdaniel.mmo.io.Config;
+import me.mrdaniel.mmo.io.players.MMOPlayer;
+import me.mrdaniel.mmo.io.players.MMOPlayerDatabase;
+import me.mrdaniel.mmo.skills.Skill;
+import me.mrdaniel.mmo.skills.SkillAction;
+import me.mrdaniel.mmo.utils.ItemUtils;
+import me.mrdaniel.mmo.utils.ItemWrapper;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
@@ -24,16 +32,8 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import me.mrdaniel.mmo.enums.Ability;
-import me.mrdaniel.mmo.enums.RepairStore;
-import me.mrdaniel.mmo.enums.SkillType;
-import me.mrdaniel.mmo.io.Config;
-import me.mrdaniel.mmo.io.players.MMOPlayer;
-import me.mrdaniel.mmo.io.players.MMOPlayerDatabase;
-import me.mrdaniel.mmo.skills.Skill;
-import me.mrdaniel.mmo.skills.SkillAction;
-import me.mrdaniel.mmo.utils.ItemUtils;
-import me.mrdaniel.mmo.utils.ItemWrapper;
+import java.util.Optional;
+import java.util.UUID;
 
 public class PlayerListener {
 	
@@ -56,7 +56,7 @@ public class PlayerListener {
 					
 					e.setCancelled(true);
 					
-					MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreate(p.getUniqueId().toString());
+					MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreatePlayer(p.getUniqueId().toString());
 					p.setItemInHand(HandTypes.MAIN_HAND, null);
 					Location<World> dropLoc = new Location<World>(loc.getExtent(), loc.getX(), loc.getY()+1, loc.getZ());
 					
@@ -79,7 +79,7 @@ public class PlayerListener {
 	public void onFallDamage(DamageEntityEvent e) {
 		if (!(e.getTargetEntity() instanceof Player)) { return; }
 		Player p = (Player) e.getTargetEntity();
-		MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreate(p.getUniqueId().toString());
+		MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreatePlayer(p.getUniqueId().toString());
 		Skill skill = mmop.getSkills().getSkill(SkillType.ACROBATICS);
 		Ability ability = Ability.DODGE;
 		if (ability.getValue(skill.level) > Math.random()*100.0) {
@@ -106,7 +106,7 @@ public class PlayerListener {
 				&& e.getItemStackTransaction().get(0) != null 
 				&& e.getItemStackTransaction().get(0).getFinal() != null 
 				&& e.getItemStackTransaction().get(0).getFinal() != ItemTypes.NONE) { 
-			MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreate(p.getUniqueId().toString());
+			MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreatePlayer(p.getUniqueId().toString());
 			mmop.process(new SkillAction(SkillType.FISHING, 450));
 			Drops.getInstance().FishingTreasure(p, mmop);
 		}
@@ -114,20 +114,20 @@ public class PlayerListener {
 	@Listener(order = Order.LAST)
 	public void onTaming(TameEntityEvent e, @First Player p) {
 		if (e.isCancelled()) { return; }
-		MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreate(p.getUniqueId().toString());
+		MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreatePlayer(p.getUniqueId().toString());
 		mmop.process(new SkillAction(SkillType.TAMING, 750));
 	}
 	@Listener
 	public void onPlayerJoin(ClientConnectionEvent.Join e) {
-		MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreate(e.getTargetEntity().getUniqueId().toString());
+		MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreatePlayer(e.getTargetEntity().getUniqueId().toString());
 		mmop.save();
 		mmop.updateTop(e.getTargetEntity().getName());
 	}
 	@Listener
 	public void onPlayerQuit(ClientConnectionEvent.Disconnect e) {
-		MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreate(e.getTargetEntity().getUniqueId().toString());
+		MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreatePlayer(e.getTargetEntity().getUniqueId().toString());
 		mmop.save();
 		mmop.updateTop(e.getTargetEntity().getName());
-		MMOPlayerDatabase.getInstance().unload(mmop);
+		MMOPlayerDatabase.getInstance().unload(UUID.fromString(mmop.getUUID()));
 	}
 }

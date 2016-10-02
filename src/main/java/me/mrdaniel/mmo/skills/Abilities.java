@@ -50,7 +50,7 @@ public class Abilities {
 		
 		p.sendMessage(Config.PREFIX().concat(Text.of(TextColors.GREEN, "Activated " + ability.name + "!")));
 		
-		MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreate(p.getUniqueId().toString());
+		MMOPlayer mmop = MMOPlayerDatabase.getInstance().getOrCreatePlayer(p.getUniqueId().toString());
 		double time = ability.getValue(mmop.getSkills().getSkill(type).level);
 		if (ability.millis) { time *= 1000; }
 		
