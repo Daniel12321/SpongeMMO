@@ -3,11 +3,13 @@ package me.mrdaniel.adventuremmo;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
+import me.mrdaniel.adventuremmo.utils.I18N;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Game;
@@ -73,7 +75,7 @@ import me.mrdaniel.adventuremmo.service.AdventureMMOService;
 import me.mrdaniel.adventuremmo.utils.ChoiceMaps;
 import me.mrdaniel.adventuremmo.utils.ItemUtils;
 
-@Plugin(id = "adventuremmo", name = "AdventureMMO", version = "2.1.2", description = "A light-weight plugin that adds skills with all sorts of fun game mechanics to your server.", authors = {
+@Plugin(id = "adventuremmo", name = "AdventureMMO", version = "2.1.3", description = "A light-weight plugin that adds skills with all sorts of fun game mechanics to your server.", authors = {
 		"Daniel12321", "rojo8399" })
 public class AdventureMMO {
 
@@ -110,6 +112,9 @@ public class AdventureMMO {
 	@Listener
 	public void onPreInit(@Nullable final GamePreInitializationEvent e) {
 		this.logger.info("Registering custom data...");
+
+		// Initialize I18N service
+		I18N.setLocale(Locale.US);
 
 		// Initialize the MMOKeys class and register the keys.
 		@SuppressWarnings("unused")
@@ -160,21 +165,21 @@ public class AdventureMMO {
 
 		// Registering Commands
 		this.game.getCommandManager().register(this,
-				CommandSpec.builder().description(Text.of(TextColors.BLUE, "AdventureMMO | Skills Command"))
+				CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.desc.skills_command")))
 						.arguments(GenericArguments
-								.optionalWeak(GenericArguments.choices(Text.of("skill"), this.choices.getSkills())))
+								.optionalWeak(GenericArguments.choices(Text.of(I18N.get("skill")), this.choices.getSkills())))
 						.executor(new CommandSkills(this)).build(),
 				config.getNode("commands", "skills").getList(obj -> (String) obj));
 
 		this.game.getCommandManager().register(this,
-				CommandSpec.builder().description(Text.of(TextColors.BLUE, "AdventureMMO | Top Command"))
+				CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.desc.top_command")))
 						.arguments(GenericArguments
-								.optionalWeak(GenericArguments.choices(Text.of("skill"), this.choices.getSkills())))
+								.optionalWeak(GenericArguments.choices(Text.of(I18N.get("skill")), this.choices.getSkills())))
 						.executor(new CommandTop(this)).build(),
 				config.getNode("commands", "tops").getList(obj -> (String) obj));
 
 		this.game.getCommandManager().register(this,
-				CommandSpec.builder().description(Text.of(TextColors.BLUE, "AdventureMMO | Settings Command"))
+				CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.desc.settings_command")))
 						.executor(new CommandSettings(this)).build(),
 				config.getNode("commands", "settings").getList(obj -> (String) obj));
 
