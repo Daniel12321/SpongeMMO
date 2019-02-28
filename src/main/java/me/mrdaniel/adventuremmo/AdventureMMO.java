@@ -3,6 +3,7 @@ package me.mrdaniel.adventuremmo;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.MessageFormat;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -24,6 +25,7 @@ import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
@@ -165,30 +167,28 @@ public class AdventureMMO {
 
 		// Registering Commands
 		this.game.getCommandManager().register(this,
-				CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.desc.skills_command")))
+				CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.title.skills_command")))
 						.arguments(GenericArguments
-								.optionalWeak(GenericArguments.choices(Text.of(I18N.get("skill")), this.choices.getSkills())))
+								.optionalWeak(GenericArguments.choices(Text.of(I18N.get("utils.skill")), this.choices.getSkills())))
 						.executor(new CommandSkills(this)).build(),
 				config.getNode("commands", "skills").getList(obj -> (String) obj));
 
 		this.game.getCommandManager().register(this,
-				CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.desc.top_command")))
+				CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.title.top_command")))
 						.arguments(GenericArguments
-								.optionalWeak(GenericArguments.choices(Text.of(I18N.get("skill")), this.choices.getSkills())))
+								.optionalWeak(GenericArguments.choices(Text.of(I18N.get("utils.skill")), this.choices.getSkills())))
 						.executor(new CommandTop(this)).build(),
 				config.getNode("commands", "tops").getList(obj -> (String) obj));
 
 		this.game.getCommandManager().register(this,
-				CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.desc.settings_command")))
+				CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.title.settings_command")))
 						.executor(new CommandSettings(this)).build(),
 				config.getNode("commands", "settings").getList(obj -> (String) obj));
 
 		SkillTypes.VALUES.stream().filter(skill -> config.getNode("commands", skill.getId()).getBoolean(true))
-				.forEach(skill -> {
-					this.game.getCommandManager().register(this, CommandSpec.builder()
-							.description(Text.of(TextColors.BLUE, "AdventureMMO | ", skill.getName(), " Command"))
-							.executor(new CommandSkill(this, skill)).build(), skill.getId());
-				});
+				.forEach(skill -> this.game.getCommandManager().register(this, CommandSpec.builder()
+						.description(Text.of(TextColors.BLUE, MessageFormat.format(I18N.get("cmd.title.common"), skill.getName())))
+						.executor(new CommandSkill(this, skill)).build(), skill.getId()));
 
 		// Admin Commands
 		this.game.getCommandManager().register(this, CommandSpec.builder()
@@ -250,7 +250,7 @@ public class AdventureMMO {
 		this.onStopping(null);
 
 		this.game.getEventManager().unregisterPluginListeners(this);
-		this.game.getScheduler().getScheduledTasks(this).forEach(task -> task.cancel());
+		this.game.getScheduler().getScheduledTasks(this).forEach(Task::cancel);
 		this.game.getCommandManager().getOwnedBy(this).forEach(this.game.getCommandManager()::removeMapping);
 
 		this.onInit(null);
