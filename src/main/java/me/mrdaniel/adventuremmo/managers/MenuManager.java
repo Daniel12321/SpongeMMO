@@ -22,6 +22,8 @@ import me.mrdaniel.adventuremmo.io.playerdata.PlayerData;
 import me.mrdaniel.adventuremmo.utils.MathUtils;
 import me.mrdaniel.adventuremmo.utils.TextUtils;
 
+import java.text.MessageFormat;
+
 public class MenuManager {
 
 	private final ScoreboardManager scoreboards;
@@ -95,7 +97,7 @@ public class MenuManager {
 
 	public void sendSkillTop(@Nonnull final Player p, @Nullable final SkillType type) {
 		MMOData sdata = p.get(MMOData.class).orElse(new MMOData());
-		String title = (type == null) ? "Total Top" : (type.getName() + " Top");
+		String title = (type == null) ? I18N.get("menu.rank.title.total") : MessageFormat.format(I18N.get("menu.rank.title.common"), type.getName());
 
 		if (sdata.getScoreboard()) {
 			if (sdata.getScoreboardPermanent()) {
