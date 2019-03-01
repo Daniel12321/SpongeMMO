@@ -12,7 +12,7 @@ public class I18N {
     private ResourceBundle rb;
 
     private I18N(Locale locale) {
-        String resource = "i18n";
+        String resource = "assets.adventuremmo.i18n";
         this.rb = ResourceBundle.getBundle(resource, locale);
     }
 

@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import me.mrdaniel.adventuremmo.utils.I18N;
+import org.apache.commons.lang3.LocaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Game;
@@ -115,9 +116,6 @@ public class AdventureMMO {
 	public void onPreInit(@Nullable final GamePreInitializationEvent e) {
 		this.logger.info("Registering custom data...");
 
-		// Initialize I18N service
-		I18N.setLocale(Locale.US);
-
 		// Initialize the MMOKeys class and register the keys.
 		@SuppressWarnings("unused")
 		Object key = MMOKeys.DURABILITY;
@@ -149,6 +147,14 @@ public class AdventureMMO {
 
 		// Loading Config
 		final Config config = new Config(this, this.configdir.resolve("config.conf"));
+
+		// Initialize I18N service
+		String localeStr = config.getNode("Locale").getString("en_US");
+		Locale locale = LocaleUtils.toLocale(localeStr);
+		if (locale == null) {
+			locale = Locale.US;
+		}
+		I18N.setLocale(locale);
 
 		// Registering Config Settings
 		Abilities.VALUES.removeIf(ability -> !config.getNode("abilities", ability.getId(), "enabled").getBoolean(true));
