@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
+import me.mrdaniel.adventuremmo.utils.I18N;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.data.type.HandTypes;
@@ -27,7 +28,7 @@ public class CommandItemClear extends PlayerCommand {
 	public void execute(final Player p, final CommandContext args) throws CommandException {
 		Optional<ItemStack> hand = p.getItemInHand(HandTypes.MAIN_HAND);
 		if (!hand.isPresent()) {
-			p.sendMessage(Text.of(TextColors.RED, "You must be holding an item to use this command"));
+			p.sendMessage(Text.of(TextColors.RED, I18N.get("cmd.msg.must_hold_item")));
 			return;
 		}
 

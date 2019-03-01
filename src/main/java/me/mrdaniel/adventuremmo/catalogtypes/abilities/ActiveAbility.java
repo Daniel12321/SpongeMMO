@@ -1,9 +1,13 @@
 package me.mrdaniel.adventuremmo.catalogtypes.abilities;
 
+import java.text.MessageFormat;
+
 import javax.annotation.Nonnull;
 
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
+
+import me.mrdaniel.adventuremmo.utils.I18N;
 
 public class ActiveAbility extends Ability {
 
@@ -27,6 +31,6 @@ public class ActiveAbility extends Ability {
 
 	@Override
 	public Text getValueLine(final int level) {
-		return Text.of(TextColors.YELLOW, "Duration: ", String.format("%.2f", this.getValue(level)), "s");
+		return Text.of(TextColors.YELLOW, MessageFormat.format(I18N.get("msg.dur.active_ability"), String.format("%.2f", this.getValue(level))));
 	}
 }

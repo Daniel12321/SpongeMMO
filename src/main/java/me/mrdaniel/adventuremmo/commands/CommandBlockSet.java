@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
+import me.mrdaniel.adventuremmo.utils.I18N;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.args.CommandContext;
@@ -29,7 +30,7 @@ public class CommandBlockSet extends PlayerCommand {
 	public void execute(final Player p, final CommandContext args) throws CommandException {
 		Optional<Location<World>> loc = ServerUtils.getFirstBlock(p);
 		if (!loc.isPresent()) {
-			p.sendMessage(Text.of(TextColors.RED, "You must be looking at a block."));
+			p.sendMessage(Text.of(TextColors.RED, I18N.get("cmd.msg.must_look_at_block")));
 			return;
 		}
 

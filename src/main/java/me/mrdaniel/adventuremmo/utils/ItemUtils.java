@@ -88,7 +88,7 @@ public class ItemUtils {
 		item.offer(new SuperToolData(item.get(Keys.ITEM_ENCHANTMENTS).orElse(Lists.newArrayList()),
 				TextUtils.toString(item.get(Keys.DISPLAY_NAME).orElse(Text.of(""))),
 				item.get(Keys.ITEM_DURABILITY).orElse(0)));
-		item.offer(Keys.DISPLAY_NAME, Text.of(TextColors.RED, TextStyles.BOLD, "Super ", tool.getName()));
+		item.offer(Keys.DISPLAY_NAME, Text.of(TextColors.RED, TextStyles.BOLD, I18N.get("utils.Super"), " ", tool.getName()));
 		item.offer(Keys.UNBREAKABLE, true);
 
 		final boolean rod = tool == ToolTypes.ROD;
@@ -123,7 +123,7 @@ public class ItemUtils {
 		List<Enchantment> enchants = Lists.newArrayList();
 		mmo.getGame().getRegistry().getAllOf(EnchantmentType.class).forEach(ench -> {
 			if (Math.random() > 0.9 && ench.canBeAppliedByTable(item)) {
-				enchants.add(Enchantment.of(ench, (int) Math.random() * ench.getMaximumLevel() + 1));
+				enchants.add(Enchantment.of(ench, (int) (Math.random() * ench.getMaximumLevel() + 1)));
 			}
 		});
 		item.offer(Keys.ITEM_ENCHANTMENTS, enchants);

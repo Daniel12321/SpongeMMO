@@ -3,6 +3,7 @@ package me.mrdaniel.adventuremmo.managers;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import me.mrdaniel.adventuremmo.utils.I18N;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
@@ -35,10 +36,10 @@ public class MenuManager {
 			@Nonnull final String name) {
 		src.sendMessage(Text.EMPTY);
 		src.sendMessage(this.getTitle(name, false));
-		src.sendMessage(Text.of(TextColors.AQUA, "Total", TextColors.GRAY, " - ", TextColors.GREEN, "Level ",
+		src.sendMessage(Text.of(TextColors.AQUA, I18N.get("menu.rank.Total"), TextColors.GRAY, " - ", TextColors.GREEN, I18N.get("menu.rank.Level"),
 				data.getLevels()));
 		SkillTypes.VALUES.forEach(skill -> src.sendMessage(Text.of(TextColors.AQUA, skill.getName(), TextColors.GRAY,
-				" - ", TextColors.GREEN, "Level ", data.getLevel(skill))));
+				" - ", TextColors.GREEN, I18N.get("menu.rank.Level"), data.getLevel(skill))));
 		src.sendMessage(Text.EMPTY);
 	}
 
@@ -48,19 +49,19 @@ public class MenuManager {
 
 		if (sdata.getScoreboard()) {
 			if (sdata.getScoreboardPermanent()) {
-				this.scoreboards.setRepeating(p, this.getTitle("Skills", true), this::getSkillListLines);
+				this.scoreboards.setRepeating(p, this.getTitle(I18N.get("menu.rank.Skills"), true), this::getSkillListLines);
 			} else {
-				this.scoreboards.setTemp(p, this.getTitle("Skills", true), this.getSkillListLines(pdata));
+				this.scoreboards.setTemp(p, this.getTitle(I18N.get("menu.rank.Skills"), true), this.getSkillListLines(pdata));
 			}
 		} else {
 			p.sendMessage(Text.EMPTY);
-			p.sendMessage(this.getTitle("Skills", false));
-			p.sendMessage(Text.of(TextColors.AQUA, "Total", TextColors.GRAY, " - ", TextColors.GREEN, "Level ",
+			p.sendMessage(this.getTitle(I18N.get("menu.rank.Skills"), false));
+			p.sendMessage(Text.of(TextColors.AQUA, I18N.get("menu.rank.Total"), TextColors.GRAY, " - ", TextColors.GREEN, I18N.get("menu.rank.Level"),
 					pdata.getLevels()));
 			SkillTypes.VALUES.forEach(skill -> p.sendMessage(Text.builder()
 					.append(Text.of(TextColors.AQUA, skill.getName(), TextColors.GRAY, " - ", TextColors.GREEN,
-							"Level ", pdata.getLevel(skill)))
-					.onHover(TextActions.showText(Text.of(TextColors.BLUE, "Click for more info.")))
+							I18N.get("menu.rank.Level"), pdata.getLevel(skill)))
+					.onHover(TextActions.showText(Text.of(TextColors.BLUE, I18N.get("menu.rank.click_for_more"))))
 					.onClick(TextActions.runCommand("/mmoskill " + skill.getId())).build()));
 			p.sendMessage(Text.EMPTY);
 		}
@@ -80,8 +81,8 @@ public class MenuManager {
 		} else {
 			p.sendMessage(Text.EMPTY);
 			p.sendMessage(this.getTitle(skill.getName(), false));
-			p.sendMessage(Text.of(TextColors.GREEN, "Level: ", pdata.getLevel(skill)));
-			p.sendMessage(Text.of(TextColors.GREEN, "EXP: ", pdata.getExp(skill), " / ",
+			p.sendMessage(Text.of(TextColors.GREEN, I18N.get("menu.rank.Level"), ": ", pdata.getLevel(skill)));
+			p.sendMessage(Text.of(TextColors.GREEN, I18N.get("menu.rank.EXP"), ": ", pdata.getExp(skill), " / ",
 					MathUtils.expTillNextLevel(pdata.getLevel(skill))));
 			skill.getAbilities().forEach(ability -> {
 				p.sendMessage(Text.EMPTY);
@@ -108,7 +109,7 @@ public class MenuManager {
 			this.scoreboards.getMMO().getTops().getTop(type)
 					.forEach((number, player) -> p
 							.sendMessage(Text.of(TextColors.RED, number, ": ", TextColors.AQUA, player.getFirst(),
-									TextColors.GRAY, " - ", TextColors.GREEN, "Level ", player.getSecond())));
+									TextColors.GRAY, " - ", TextColors.GREEN, I18N.get("menu.rank.Level"), " ", player.getSecond())));
 			p.sendMessage(Text.EMPTY);
 		}
 	}
@@ -117,9 +118,9 @@ public class MenuManager {
 		MMOData data = p.get(MMOData.class).orElse(new MMOData());
 
 		p.sendMessage(Text.EMPTY);
-		p.sendMessage(this.getTitle("Settings", false));
+		p.sendMessage(this.getTitle(I18N.get("utils.Settings"), false));
 		p.sendMessage(Text.builder()
-				.append(Text.of(TextColors.AQUA, "Action Bar: ", TextUtils.getValueText(data.getActionBar())))
+				.append(Text.of(TextColors.AQUA, "Action Bar", ": ", TextUtils.getValueText(data.getActionBar())))
 				.onHover(TextActions.showText(TextUtils.getToggleText(data.getActionBar())))
 				.onClick(TextActions.executeCallback(src -> {
 					data.setActionBar(!data.getActionBar());
@@ -127,7 +128,7 @@ public class MenuManager {
 					this.sendSettingsInfo((Player) src);
 				})).build());
 		p.sendMessage(Text.builder()
-				.append(Text.of(TextColors.AQUA, "Scoreboard: ", TextUtils.getValueText(data.getScoreboard())))
+				.append(Text.of(TextColors.AQUA, "Scoreboard", ": ", TextUtils.getValueText(data.getScoreboard())))
 				.onHover(TextActions.showText(TextUtils.getToggleText(data.getScoreboard())))
 				.onClick(TextActions.executeCallback(src -> {
 					data.setScoreboard(!data.getScoreboard());
@@ -136,7 +137,7 @@ public class MenuManager {
 					this.scoreboards.unload(p);
 				})).build());
 		p.sendMessage(Text.builder()
-				.append(Text.of(TextColors.AQUA, "Scoreboard Permanent: ",
+				.append(Text.of(TextColors.AQUA, "Scoreboard Permanent", ": ",
 						TextUtils.getValueText(data.getScoreboardPermanent())))
 				.onHover(TextActions.showText(TextUtils.getToggleText(data.getScoreboardPermanent())))
 				.onClick(TextActions.executeCallback(src -> {
@@ -154,7 +155,7 @@ public class MenuManager {
 
 		SkillTypes.VALUES.forEach(type -> lines.put(data.getLevel(type),
 				Text.of(TextColors.AQUA, type.getName(), TextColors.GRAY, " - ")));
-		lines.put(data.getLevels(), Text.of(TextColors.GREEN, "Total", TextColors.GRAY, " - "));
+		lines.put(data.getLevels(), Text.of(TextColors.GREEN, I18N.get("menu.rank.Total"), TextColors.GRAY, " - "));
 
 		return lines;
 	}
@@ -169,9 +170,9 @@ public class MenuManager {
 			lines.put(i++, this.getBoardTitle(ability.getName(), true));
 			lines.put(i++, this.getEmptyLine());
 		}
-		lines.put(i++, Text.of(TextColors.GREEN, "EXP: ", data.getExp(skill), " / ",
+		lines.put(i++, Text.of(TextColors.GREEN, I18N.get("menu.rank.EXP"), ": ", data.getExp(skill), " / ",
 				MathUtils.expTillNextLevel(data.getLevel(skill))));
-		lines.put(i++, Text.of(TextColors.GREEN, "Level: ", data.getLevel(skill)));
+		lines.put(i++, Text.of(TextColors.GREEN, I18N.get("menu.rank.Level"), ": ", data.getLevel(skill)));
 
 		return lines;
 	}

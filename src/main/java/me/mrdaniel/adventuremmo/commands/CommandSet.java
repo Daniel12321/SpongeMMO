@@ -2,6 +2,7 @@ package me.mrdaniel.adventuremmo.commands;
 
 import javax.annotation.Nonnull;
 
+import me.mrdaniel.adventuremmo.utils.I18N;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -31,7 +32,7 @@ public class CommandSet extends MMOObject implements CommandExecutor {
 
 		PlayerData data = user.getPlayer().isPresent() ? super.getMMO().getPlayerDatabase().get(user.getUniqueId())
 				: super.getMMO().getPlayerDatabase().getOffline(user.getUniqueId())
-						.orElseThrow(() -> new CommandException(Text.of(TextColors.RED, "Invalid User!")));
+						.orElseThrow(() -> new CommandException(Text.of(TextColors.RED, I18N.get("cmd.except.invalid_user"))));
 		data.setLevel(skill, level);
 		data.setExp(skill, exp);
 

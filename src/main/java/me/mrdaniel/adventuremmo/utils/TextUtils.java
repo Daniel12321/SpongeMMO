@@ -33,12 +33,12 @@ public class TextUtils {
 
 	@Nonnull
 	public static Text getValueText(final boolean value) {
-		return value ? Text.of(TextColors.GREEN, "Enabled") : Text.of(TextColors.RED, "Disabled");
+		return value ? Text.of(TextColors.GREEN, "Enabled") : Text.of(TextColors.RED, I18N.get("utils.Disabled"));
 	}
 
 	@Nonnull
 	public static Text getToggleText(final boolean value) {
-		return value ? Text.of(TextColors.RED, "Disable") : Text.of(TextColors.GREEN, "Enable");
+		return value ? Text.of(TextColors.RED, "Disable") : Text.of(TextColors.GREEN, I18N.get("utils.Enable"));
 	}
 
 	// @Nonnull

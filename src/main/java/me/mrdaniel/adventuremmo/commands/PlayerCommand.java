@@ -1,5 +1,6 @@
 package me.mrdaniel.adventuremmo.commands;
 
+import me.mrdaniel.adventuremmo.utils.I18N;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -14,7 +15,7 @@ public abstract class PlayerCommand implements CommandExecutor {
 	@Override
 	public CommandResult execute(final CommandSource src, final CommandContext args) throws CommandException {
 		if (!(src instanceof Player)) {
-			src.sendMessage(Text.of(TextColors.RED, "This commands is for players only."));
+			src.sendMessage(Text.of(TextColors.RED, I18N.get("cmd.except.cmd_for_user")));
 			return CommandResult.success();
 		}
 		Player p = (Player) src;

@@ -169,14 +169,14 @@ public class AdventureMMO {
 		this.game.getCommandManager().register(this,
 				CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.title.skills_command")))
 						.arguments(GenericArguments
-								.optionalWeak(GenericArguments.choices(Text.of(I18N.get("utils.skill")), this.choices.getSkills())))
+								.optionalWeak(GenericArguments.choices(Text.of("skill"), this.choices.getSkills())))
 						.executor(new CommandSkills(this)).build(),
 				config.getNode("commands", "skills").getList(obj -> (String) obj));
 
 		this.game.getCommandManager().register(this,
 				CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.title.top_command")))
 						.arguments(GenericArguments
-								.optionalWeak(GenericArguments.choices(Text.of(I18N.get("utils.skill")), this.choices.getSkills())))
+								.optionalWeak(GenericArguments.choices(Text.of("skill"), this.choices.getSkills())))
 						.executor(new CommandTop(this)).build(),
 				config.getNode("commands", "tops").getList(obj -> (String) obj));
 
@@ -192,30 +192,30 @@ public class AdventureMMO {
 
 		// Admin Commands
 		this.game.getCommandManager().register(this, CommandSpec.builder()
-				.child(CommandSpec.builder().description(Text.of(TextColors.BLUE, "AdventureMMO | Reload Command"))
+				.child(CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.title.reload_command")))
 						.permission("mmo.admin.reload").executor(new CommandReload(this)).build(), "reload")
-				.child(CommandSpec.builder().description(Text.of(TextColors.BLUE, "AdventureMMO | View Command"))
+				.child(CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.title.view_command")))
 						.permission("mmo.admin.view").arguments(GenericArguments.user(Text.of("user")))
 						.executor(new CommandView(this)).build(), "view")
-				.child(CommandSpec.builder().description(Text.of(TextColors.BLUE, "AdventureMMO | Set Command"))
+				.child(CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.title.set_command")))
 						.permission("mmo.admin.set")
 						.arguments(GenericArguments.user(Text.of("user")),
 								GenericArguments.choices(Text.of("skill"), this.choices.getSkills()),
 								GenericArguments.integer(Text.of("level")),
 								GenericArguments.optionalWeak(GenericArguments.integer(Text.of("exp"))))
 						.executor(new CommandSet(this)).build(), "set")
-				.child(CommandSpec.builder().description(Text.of(TextColors.BLUE, "AdventureMMO | SetItem Command"))
+				.child(CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.title.setitem_command")))
 						.permission("mmo.admin.setitem")
 						.arguments(GenericArguments.choices(Text.of("tooltype"), this.choices.getTools()))
 						.executor(new CommandItemSet(this)).build(), "setitem")
-				.child(CommandSpec.builder().description(Text.of(TextColors.BLUE, "AdventureMMO | SetBlock Command"))
+				.child(CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.title.setblock_command")))
 						.permission("mmo.admin.setblock")
 						.arguments(GenericArguments.choices(Text.of("skill"), this.choices.getSkills()),
 								GenericArguments.integer(Text.of("exp")))
 						.executor(new CommandBlockSet(this)).build(), "setblock")
-				.child(CommandSpec.builder().description(Text.of(TextColors.BLUE, "AdventureMMO | ClearItem Command"))
+				.child(CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.title.clearitem_command")))
 						.permission("mmo.admin.clearitem").executor(new CommandItemClear(this)).build(), "clearitem")
-				.child(CommandSpec.builder().description(Text.of(TextColors.BLUE, "AdventureMMO | ClearBlock Command"))
+				.child(CommandSpec.builder().description(Text.of(TextColors.BLUE, I18N.get("cmd.title.clearblock_command")))
 						.permission("mmo.admin.clearblock").executor(new CommandBlockClear(this)).build(), "clearblock")
 				.build(), "mmoadmin");
 
